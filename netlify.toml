@@ -1,0 +1,9 @@
+[build]
+  functions = "netlify/functions"
+  publish = "public"
+
+[functions]
+  included_files = ["model/**"]
+
+[build.environment]
+  NODE_VERSION = "20"

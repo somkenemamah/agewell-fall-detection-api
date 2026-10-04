@@ -55,6 +55,15 @@ function locateFile(path) {
   if (Module['locateFile']) {
     return Module['locateFile'](path, scriptDirectory);
   }
+  // Serverless bundlers inline this loader but keep included binary assets in
+  // the project-level model directory. Prefer that preserved path when it
+  // exists, while retaining Edge Impulse's original local-file behaviour.
+  if (ENVIRONMENT_IS_NODE) {
+    var bundledModelPath = require('path').join(process.cwd(), 'model', path);
+    if (require('fs').existsSync(bundledModelPath)) {
+      return bundledModelPath;
+    }
+  }
   return scriptDirectory + path;
 }
 
@@ -7319,7 +7328,6 @@ if (Module['preInit']) {
 }
 
 run();
-
 
 
 
